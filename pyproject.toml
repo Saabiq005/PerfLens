@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=69.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "perflens"
+version = "0.1.0"
+description = "AI Application Performance Data Pipeline"
+readme = "README.md"
+requires-python = ">=3.12"
+
+authors = [
+    { name = "Saabiq Ahamed" }
+]
+
+dependencies = [
+    "PyYAML",
+    "redis",
+    "pydantic",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = [
+    "tests"
+]
