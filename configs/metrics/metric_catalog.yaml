@@ -1,0 +1,155 @@
+catalog:
+  name: PerfLens Metric Catalog
+  version: 1.0.0
+  schema_version: 1.0.0
+  description: >
+    Master catalog containing all supported telemetry metrics
+    for the PerfLens Application Performance Data Pipeline.
+
+  author: Saabiq Ahamed
+  last_updated: "2026-07-10"
+
+  metrics:
+
+    - id: latency
+
+      display_name: Request Latency
+
+      description: >
+        Time taken to process a request from start to finish.
+
+      category: performance
+
+      unit: milliseconds
+
+      data_type: float
+
+      precision: 2
+
+      aggregation:
+        default: average
+        supported:
+          - average
+          - minimum
+          - maximum
+          - p50
+          - p95
+          - p99
+
+      validation:
+        minimum: 0
+        maximum: 60000
+        nullable: false
+
+      enabled: true
+
+      tags:
+        - performance
+        - latency
+        - response_time
+
+    - id: throughput
+
+      display_name: Throughput
+
+      description: >
+        Number of requests successfully processed per second.
+
+      category: performance
+
+      unit: requests_per_second
+
+      data_type: integer
+
+      precision: 0
+
+      aggregation:
+        default: average
+        supported:
+          - average
+          - minimum
+          - maximum
+          - sum
+
+      validation:
+        minimum: 0
+        maximum: 100000
+        nullable: false
+
+      enabled: true
+
+      tags:
+        - performance
+        - throughput
+        - traffic
+
+    - id: error_rate
+
+      display_name: Error Rate
+
+      description: >
+        Percentage of failed requests relative to total requests.
+
+      category: reliability
+
+      unit: percent
+
+      data_type: float
+
+      precision: 4
+
+      aggregation:
+        default: average
+        supported:
+          - average
+          - minimum
+          - maximum
+
+      validation:
+        minimum: 0
+        maximum: 100
+        nullable: false
+
+      enabled: true
+
+      tags:
+        - reliability
+        - errors
+        - failures
+
+    - id: trace_duration
+
+      display_name: Trace Duration
+
+      description: >
+        Total execution time of a distributed trace.
+
+      category: tracing
+
+      unit: milliseconds
+
+      data_type: float
+
+      precision: 2
+
+      aggregation:
+        default: average
+        supported:
+          - average
+          - minimum
+          - maximum
+          - p50
+          - p95
+          - p99
+
+      validation:
+        minimum: 0
+        maximum: 60000
+        nullable: false
+
+      enabled: true
+
+      tags:
+        - tracing
+        - distributed_tracing
+        - performance

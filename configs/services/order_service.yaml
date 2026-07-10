@@ -1,0 +1,67 @@
+service:
+
+  identity:
+
+    id: order_service
+
+    display_name: Order Processing Service
+
+    description: >
+      Simulated microservice responsible for processing customer
+      orders within the PerfLens environment.
+
+    domain: Order Management
+
+  deployment:
+
+    environment: development
+
+    deployment_tag: release-1
+
+    version: 1.0.0
+
+  telemetry:
+
+    enabled: true
+
+    metrics:
+
+      - latency
+
+      - throughput
+
+      - error_rate
+
+      - trace_duration
+
+  scenarios:
+
+    supported:
+
+      - healthy
+
+      - traffic_spike
+
+      - database_bottleneck
+
+      - error_storm
+
+      - recovery
+
+    initial: healthy
+
+  metadata:
+
+    owner: Platform Engineering
+
+    criticality: high
+
+    sla: 99.9%
+
+    tags:
+
+      - orders
+
+      - api
+
+      - performance

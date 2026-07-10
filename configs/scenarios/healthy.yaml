@@ -1,0 +1,72 @@
+scenario:
+
+  identity:
+
+    id: healthy
+
+    display_name: Healthy Operation
+
+    description: >
+      Represents normal application behaviour under expected
+      production conditions with stable latency,
+      consistent throughput,
+      minimal errors,
+      and predictable trace durations.
+
+  runtime:
+
+    duration:
+
+      minimum_seconds: 60
+
+      maximum_seconds: 180
+
+  metrics:
+
+    -metric_id: latency
+
+      baseline: 100
+
+      variance: 10
+
+      distribution: normal
+
+      trend: stable
+
+    -metric_id: throughput
+
+      baseline: 250
+
+      variance: 15
+
+      distribution: normal
+
+      trend: stable
+
+    -metric_id: error_rate
+
+      baseline: 0.20
+
+      variance: 0.05
+
+      distribution: normal
+
+      trend: stable
+
+    -metric_id: trace_duration
+
+      baseline: 95
+
+      variance: 8
+
+      distribution: normal
+
+      trend: stable
+
+  transitions:
+
+    traffic_spike: 0.70
+
+    database_bottleneck: 0.20
+
+    error_storm: 0.10

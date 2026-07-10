@@ -1,0 +1,48 @@
+scenario:
+
+  identity:
+
+    id: recovery
+
+    display_name: Recovery
+
+    description: >
+      Simulates gradual stabilization after an incident.
+
+  runtime:
+
+    duration:
+
+      minimum_seconds: 60
+
+      maximum_seconds: 150
+
+  metrics:
+
+    - metric_id: latency
+      baseline: 130
+      variance: 15
+      distribution: normal
+      trend: decreasing
+
+    - metric_id: throughput
+      baseline: 230
+      variance: 20
+      distribution: normal
+      trend: increasing
+
+    - metric_id: error_rate
+      baseline: 0.5
+      variance: 0.1
+      distribution: normal
+      trend: decreasing
+
+    - metric_id: trace_duration
+      baseline: 120
+      variance: 10
+      distribution: normal
+      trend: decreasing
+
+  transitions:
+
+    healthy: 1.0

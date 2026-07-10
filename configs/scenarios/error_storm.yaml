@@ -1,0 +1,49 @@
+scenario:
+
+  identity:
+
+    id: error_storm
+
+    display_name: Error Storm
+
+    description: >
+      Simulates cascading failures resulting in high
+      application error rates.
+
+  runtime:
+
+    duration:
+
+      minimum_seconds: 30
+
+      maximum_seconds: 90
+
+  metrics:
+
+    - metric_id: latency
+      baseline: 800
+      variance: 80
+      distribution: normal
+      trend: increasing
+
+    - metric_id: throughput
+      baseline: 70
+      variance: 10
+      distribution: normal
+      trend: decreasing
+
+    - metric_id: error_rate
+      baseline: 18
+      variance: 2
+      distribution: normal
+      trend: increasing
+
+    - metric_id: trace_duration
+      baseline: 780
+      variance: 60
+      distribution: normal
+      trend: increasing
+
+  transitions:
+
+    recovery: 1.0

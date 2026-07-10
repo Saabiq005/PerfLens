@@ -1,0 +1,51 @@
+scenario:
+
+  identity:
+
+    id: database_bottleneck
+
+    display_name: Database Bottleneck
+
+    description: >
+      Simulates database resource contention causing
+      increased response time and reduced throughput.
+
+  runtime:
+
+    duration:
+
+      minimum_seconds: 60
+
+      maximum_seconds: 180
+
+  metrics:
+
+    - metric_id: latency
+      baseline: 450
+      variance: 50
+      distribution: normal
+      trend: increasing
+
+    - metric_id: throughput
+      baseline: 120
+      variance: 15
+      distribution: normal
+      trend: decreasing
+
+    - metric_id: error_rate
+      baseline: 2.5
+      variance: 0.5
+      distribution: normal
+      trend: increasing
+
+    - metric_id: trace_duration
+      baseline: 420
+      variance: 40
+      distribution: normal
+      trend: increasing
+
+  transitions:
+
+    error_storm: 0.60
+
+    recovery: 0.40

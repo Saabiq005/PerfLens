@@ -1,0 +1,51 @@
+scenario:
+
+  identity:
+
+    id: traffic_spike
+
+    display_name: Traffic Spike
+
+    description: >
+      Simulates a sudden increase in incoming requests causing
+      increased latency and throughput without immediate failures.
+
+  runtime:
+
+    duration:
+
+      minimum_seconds: 45
+
+      maximum_seconds: 120
+
+  metrics:
+
+    - metric_id: latency
+      baseline: 180
+      variance: 20
+      distribution: normal
+      trend: increasing
+
+    - metric_id: throughput
+      baseline: 700
+      variance: 40
+      distribution: normal
+      trend: increasing
+
+    - metric_id: error_rate
+      baseline: 0.40
+      variance: 0.08
+      distribution: normal
+      trend: stable
+
+    - metric_id: trace_duration
+      baseline: 160
+      variance: 15
+      distribution: normal
+      trend: increasing
+
+  transitions:
+
+    database_bottleneck: 0.70
+
+    recovery: 0.30
