@@ -23,7 +23,7 @@ scenario:
 
   metrics:
 
-    -metric_id: latency
+    - metric_id: latency
 
       baseline: 100
 
@@ -33,7 +33,7 @@ scenario:
 
       trend: stable
 
-    -metric_id: throughput
+    - metric_id: throughput
 
       baseline: 250
 
@@ -43,7 +43,7 @@ scenario:
 
       trend: stable
 
-    -metric_id: error_rate
+    - metric_id: error_rate
 
       baseline: 0.20
 
@@ -53,7 +53,7 @@ scenario:
 
       trend: stable
 
-    -metric_id: trace_duration
+    - metric_id: trace_duration
 
       baseline: 95
 

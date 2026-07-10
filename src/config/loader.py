@@ -22,15 +22,22 @@ This module does NOT:
 
 from pathlib import Path
 
+from typing import Any
+
+import yaml
+from yaml import YAMLError
+
 # ============================================================================
 # Local Imports
 # ============================================================================
 
 from src.common.enums import ConfigCategory
+
 from src.config.exceptions import (
     ConfigurationNotFoundError,
+    ConfigurationValidationError,
     UnsupportedConfigurationError,
-)
+)  
 
 
 # ============================================================================
@@ -143,3 +150,126 @@ class ConfigurationLoader:
             )
 
         return file_path.resolve()
+    
+    def exists(
+        self,
+        category: ConfigCategory,
+        filename: str,
+    ) -> bool:
+        """
+        Determine whether a configuration file exists.
+
+        Args:
+            category:
+                Configuration category containing the file.
+
+            filename:
+                Configuration filename.
+
+        Returns:
+            True if the configuration file exists;
+            otherwise False.
+        """
+        try:
+            self.resolve_path(category, filename)
+            return True
+
+        except (
+            ConfigurationNotFoundError,
+            UnsupportedConfigurationError,
+        ):
+            return False
+    
+    def list_files(
+        self,
+        category: ConfigCategory,
+    ) -> list[Path]:
+        """
+        List all supported configuration files within a category.
+
+        Args:
+            category:
+                Configuration category to search.
+
+        Returns:
+            A sorted list of absolute paths to YAML configuration files.
+
+        Raises:
+            ConfigurationNotFoundError:
+                If the configuration category directory does not exist.
+        """
+        category_path = self.configuration_root / category.value
+
+        if not category_path.exists():
+            raise ConfigurationNotFoundError(
+                message="Configuration category directory does not exist.",
+                config_type="directory",
+                config_name=str(category_path),
+            )
+
+        files = [
+            file.resolve()
+            for file in category_path.iterdir()
+            if file.is_file()
+            and file.suffix.lower() in (".yaml", ".yml")
+        ]
+
+        return sorted(files)
+
+    def load_file(
+        self,
+        category: ConfigCategory,
+        filename: str,
+    ) -> dict[str, Any]:
+        """
+        Load and deserialize a YAML configuration file.
+
+        Args:
+            category:
+                Configuration category containing the file.
+
+            filename:
+                Name of the configuration file.
+
+        Returns:
+            Parsed YAML configuration as a dictionary.
+
+        Raises:
+            ConfigurationNotFoundError:
+                If the configuration file does not exist.
+
+            UnsupportedConfigurationError:
+                If the file extension is not supported.
+
+            ConfigurationValidationError:
+                If the YAML file cannot be parsed.
+        """
+        file_path = self.resolve_path(category, filename)
+
+        try:
+            with file_path.open(
+                mode="r",
+                encoding="utf-8",
+            ) as yaml_file:
+
+                data = yaml.safe_load(yaml_file)
+
+        except YAMLError as exc:
+            raise ConfigurationValidationError(
+                message="Failed to parse YAML configuration.",
+                config_type=category.value,
+                config_name=filename,
+                details={"error": str(exc)},
+            ) from exc
+
+        if data is None:
+            return {}
+
+        if not isinstance(data, dict):
+            raise ConfigurationValidationError(
+                message="Configuration root must be a YAML mapping.",
+                config_type=category.value,
+                config_name=filename,
+            )
+
+        return data    
