@@ -1,5 +1,7 @@
 scenario:
 
+  schema_version: 1.0.0
+
   identity:
 
     id: database_bottleneck
