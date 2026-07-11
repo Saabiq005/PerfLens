@@ -5,7 +5,7 @@ Purpose:
     Centralizes access to all loaded configuration data.
 
 Responsibilities:
-    - Load configuration files.
+    - Load all configuration categories.
     - Store configuration in memory.
     - Provide read-only access to configuration.
 
@@ -52,90 +52,59 @@ class ConfigurationRegistry:
                 Configuration loader instance.
         """
         self._loader = loader
-
-        self._metric_catalog: dict[str, Any] = {}
-
-        self._services: dict[str, dict[str, Any]] = {}
-
-        self._scenarios: dict[str, dict[str, Any]] = {}
+        self._registry: dict[ConfigCategory, Any] = {}
 
     def load(self) -> None:
         """
         Load all supported configuration.
         """
-        self._metric_catalog = self._loader.load_file(
-            ConfigCategory.METRICS,
-            "metric_catalog.yaml",
+        self._registry[ConfigCategory.METRICS] = (
+            self._loader.load_file(
+                ConfigCategory.METRICS,
+                "metric_catalog.yaml",
+            )
         )
 
-        self._services = self._loader.load_directory(
-            ConfigCategory.SERVICES,
+        self._registry[ConfigCategory.SERVICES] = (
+            self._loader.load_directory(
+                ConfigCategory.SERVICES,
+            )
         )
 
-        self._scenarios = self._loader.load_directory(
-            ConfigCategory.SCENARIOS,
+        self._registry[ConfigCategory.SCENARIOS] = (
+            self._loader.load_directory(
+                ConfigCategory.SCENARIOS,
+            )
         )
 
-    @property
-    def metric_catalog(self) -> dict[str, Any]:
-        """
-        Return the metric catalog.
-        """
-        return self._metric_catalog
-
-    @property
-    def services(self) -> dict[str, dict[str, Any]]:
-        """
-        Return loaded services.
-        """
-        return self._services
-
-    @property
-    def scenarios(self) -> dict[str, dict[str, Any]]:
-        """
-        Return loaded scenarios.
-        """
-        return self._scenarios
-
-    def get_service(
+    def get(
         self,
-        service_name: str,
-    ) -> dict[str, Any]:
+        category: ConfigCategory,
+    ) -> Any:
         """
-        Return a service configuration.
+        Return configuration for a category.
 
         Args:
-            service_name:
-                Service name.
+            category:
+                Configuration category.
 
         Returns:
-            Service configuration.
+            Loaded configuration.
 
         Raises:
             KeyError:
-                If the service does not exist.
+                If the category has not been loaded.
         """
-        return self._services[service_name]
+        return self._registry[category]
 
-    def get_scenario(
+    def contains(
         self,
-        scenario_name: str,
-    ) -> dict[str, Any]:
+        category: ConfigCategory,
+    ) -> bool:
         """
-        Return a scenario configuration.
-
-        Args:
-            scenario_name:
-                Scenario name.
-
-        Returns:
-            Scenario configuration.
-
-        Raises:
-            KeyError:
-                If the scenario does not exist.
+        Determine whether a category has been loaded.
         """
-        return self._scenarios[scenario_name]
+        return category in self._registry
 
     def metric_exists(
         self,
@@ -143,15 +112,10 @@ class ConfigurationRegistry:
     ) -> bool:
         """
         Determine whether a metric exists.
-
-        Args:
-            metric_id:
-                Metric identifier.
-
-        Returns:
-            True if the metric exists.
         """
-        metrics = self._metric_catalog["catalog"]["metrics"]
+        catalog = self.get(ConfigCategory.METRICS)
+
+        metrics = catalog["catalog"]["metrics"]
 
         return any(
             metric["metric_id"] == metric_id
@@ -165,7 +129,11 @@ class ConfigurationRegistry:
         """
         Determine whether a service exists.
         """
-        return service_name in self._services
+        services = self.get(
+            ConfigCategory.SERVICES,
+        )
+
+        return service_name in services
 
     def scenario_exists(
         self,
@@ -174,4 +142,8 @@ class ConfigurationRegistry:
         """
         Determine whether a scenario exists.
         """
-        return scenario_name in self._scenarios
+        scenarios = self.get(
+            ConfigCategory.SCENARIOS,
+        )
+
+        return scenario_name in scenarios
