@@ -183,3 +183,44 @@ def test_load_missing_configuration() -> None:
             ConfigCategory.METRICS,
             "missing.yaml",
         )
+
+def test_load_metric_directory() -> None:
+    """Verify all metric configurations are loaded."""
+
+    loader = ConfigurationLoader(Path("configs"))
+
+    configs = loader.load_directory(
+        ConfigCategory.METRICS,
+    )
+
+    assert len(configs) == 1
+    assert "metric_catalog" in configs
+
+
+def test_load_scenario_directory() -> None:
+    """Verify all scenario configurations are loaded."""
+
+    loader = ConfigurationLoader(Path("configs"))
+
+    configs = loader.load_directory(
+        ConfigCategory.SCENARIOS,
+    )
+
+    assert len(configs) == 5
+    assert "healthy" in configs
+    assert "traffic_spike" in configs
+    assert "database_bottleneck" in configs
+    assert "error_storm" in configs
+    assert "recovery" in configs
+
+
+def test_loaded_directory_returns_dictionary() -> None:
+    """Verify the return type."""
+
+    loader = ConfigurationLoader(Path("configs"))
+
+    configs = loader.load_directory(
+        ConfigCategory.SCENARIOS,
+    )
+
+    assert isinstance(configs, dict)

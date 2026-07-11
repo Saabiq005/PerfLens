@@ -272,4 +272,37 @@ class ConfigurationLoader:
                 config_name=filename,
             )
 
-        return data    
+        return data  
+
+    def load_directory(
+        self,
+        category: ConfigCategory,
+    ) -> dict[str, dict[str, Any]]:
+        """
+        Load every configuration file within a category.
+
+        Args:
+            category:
+                Configuration category to load.
+
+        Returns:
+            Dictionary mapping configuration names to their
+            parsed YAML content.
+
+        Raises:
+            ConfigurationNotFoundError:
+                If the category directory does not exist.
+
+            ConfigurationValidationError:
+                If any configuration file cannot be parsed.
+        """
+        configurations: dict[str, dict[str, Any]] = {}
+
+        for file_path in self.list_files(category):
+
+            configurations[file_path.stem] = self.load_file(
+                category=category,
+                filename=file_path.name,
+            )
+
+        return configurations      
