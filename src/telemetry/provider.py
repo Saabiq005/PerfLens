@@ -6,14 +6,14 @@ Purpose:
 
 Responsibilities:
     - Configure MeterProvider.
-    - Configure MetricReader.
-    - Configure Exporter.
+    - Configure OpenTelemetry Resource.
+    - Obtain MetricReaders from exporter implementations.
     - Expose Meter instances.
 
 This module does NOT:
-    - Create instruments.
     - Record metrics.
-    - Know about simulation.
+    - Create instruments.
+    - Know about the simulator.
 """
 
 # ============================================================================
@@ -27,15 +27,14 @@ from __future__ import annotations
 # ============================================================================
 
 from opentelemetry import metrics
-
 from opentelemetry.sdk.metrics import MeterProvider
-
-from opentelemetry.sdk.metrics.export import (
-    ConsoleMetricExporter,
-    PeriodicExportingMetricReader,
-)
-
 from opentelemetry.sdk.resources import Resource
+
+# ============================================================================
+# Local Imports
+# ============================================================================
+
+from src.telemetry.exporters.factory import ExporterFactory
 
 
 class TelemetryProvider:
@@ -47,7 +46,25 @@ class TelemetryProvider:
         self,
         service_name: str = "PerfLens",
         service_version: str = "1.0.0",
+        exporter: str = "console",
+        **exporter_kwargs,
     ) -> None:
+        """
+        Initialize the telemetry provider.
+
+        Args:
+            service_name:
+                Service name reported to OpenTelemetry.
+
+            service_version:
+                Service version.
+
+            exporter:
+                Exporter implementation name.
+
+            exporter_kwargs:
+                Additional exporter-specific configuration.
+        """
 
         resource = Resource.create(
             {
@@ -56,16 +73,15 @@ class TelemetryProvider:
             }
         )
 
-        exporter = ConsoleMetricExporter()
-
-        reader = PeriodicExportingMetricReader(
+        exporter_instance = ExporterFactory.create(
             exporter,
+            **exporter_kwargs,
         )
 
         provider = MeterProvider(
             resource=resource,
             metric_readers=[
-                reader,
+                exporter_instance.metric_reader(),
             ],
         )
 
@@ -73,10 +89,14 @@ class TelemetryProvider:
             provider,
         )
 
+        self._provider = provider
+
         self._meter = metrics.get_meter(
-            "PerfLens",
-            service_version,
+            name=service_name,
+            version=service_version,
         )
+
+    # ===================================================================
 
     @property
     def meter(self):
@@ -84,3 +104,12 @@ class TelemetryProvider:
         Return the configured Meter.
         """
         return self._meter
+
+    # ===================================================================
+
+    @property
+    def provider(self) -> MeterProvider:
+        """
+        Return the configured MeterProvider.
+        """
+        return self._provider

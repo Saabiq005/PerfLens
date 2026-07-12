@@ -63,7 +63,9 @@ class Application:
             configuration_registry,
         )
 
-        telemetry_provider = TelemetryProvider()
+        telemetry_provider = TelemetryProvider(
+        exporter="otlp",
+        endpoint="http://localhost:4318/v1/metrics",)
 
         instrument_registry = InstrumentRegistry(
             telemetry_provider.meter,
@@ -127,5 +129,5 @@ class Application:
 
         # Adjust these calls to match your existing registry API.
         registry.load()
-        
+
         return registry

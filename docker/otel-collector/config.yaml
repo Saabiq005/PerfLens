@@ -1,12 +1,10 @@
 receivers:
-
   otlp:
-
     protocols:
-
       grpc:
-
+        endpoint: 0.0.0.0:4317  # Change from 127.0.0.1 to 0.0.0.0
       http:
+        endpoint: 0.0.0.0:4318  # Change from 127.0.0.1 to 0.0.0.0
 
 
 processors:
@@ -15,10 +13,9 @@ processors:
 
 
 exporters:
-
-  logging:
-
-    verbosity: detailed
+  # Change this from logging:
+  debug:
+    verbosity: detailed  # Options: basic, normal, detailed
 
 
 service:
@@ -37,4 +34,4 @@ service:
 
       exporters:
 
-        - logging
+        - debug
