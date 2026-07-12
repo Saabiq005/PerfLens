@@ -8,6 +8,8 @@ Description-Content-Type: text/markdown
 Requires-Dist: PyYAML
 Requires-Dist: redis
 Requires-Dist: pydantic
+Requires-Dist: opentelemetry-api
+Requires-Dist: opentelemetry-sdk
 
 # PerfLens
 

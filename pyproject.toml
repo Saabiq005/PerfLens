@@ -17,6 +17,8 @@ dependencies = [
     "PyYAML",
     "redis",
     "pydantic",
+    "opentelemetry-api",
+    "opentelemetry-sdk",
 ]
 
 [tool.pytest.ini_options]

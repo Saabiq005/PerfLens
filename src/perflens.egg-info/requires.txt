@@ -1,3 +1,5 @@
 PyYAML
 redis
 pydantic
+opentelemetry-api
+opentelemetry-sdk
