@@ -1,6 +1,8 @@
 README.md
 pyproject.toml
 src/__init__.py
+src/main.py
+src/app/application.py
 src/common/enums.py
 src/config/__init__.py
 src/config/constants.py
@@ -34,4 +36,6 @@ src/simulation/metric_generator.py
 src/simulation/scenario_engine.py
 src/simulation/simulator.py
 src/telemetry/__inti__.py
+src/telemetry/instrument_registry.py
+src/telemetry/metric_recorder.py
 src/telemetry/provider.py

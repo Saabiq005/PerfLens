@@ -1,10 +1,12 @@
 __init__
 ai
+app
 common
 config
 dashboard
 ingestion
 instrumentation
+main
 mappers
 models
 monitoring
