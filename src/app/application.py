@@ -126,16 +126,6 @@ class Application:
         )
 
         # Adjust these calls to match your existing registry API.
-        registry.load_category(
-            ConfigCategory.METRICS,
-        )
-
-        registry.load_category(
-            ConfigCategory.SCENARIOS,
-        )
-
-        registry.load_category(
-            ConfigCategory.SERVICES,
-        )
-
+        registry.load()
+        
         return registry
