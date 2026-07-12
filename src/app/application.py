@@ -63,9 +63,21 @@ class Application:
             configuration_registry,
         )
 
+        # Extract the telemetry dictionary mapping from the configuration registry
+        telemetry_config = configuration_registry.get(ConfigCategory.TELEMETRY)["telemetry"]
+
+        # Parse specific blocks safely out of the configurations dictionary
+        resource_info = telemetry_config.get("resource", {})
+        exporter_type = telemetry_config.get("exporter", "console")
+        otlp_kwargs = telemetry_config.get("otlp", {})
+
+        # Instantiate the provider dynamically using the loaded configuration properties
         telemetry_provider = TelemetryProvider(
-        exporter="otlp",
-        endpoint="http://localhost:4318/v1/metrics",)
+            service_name=resource_info.get("service_name", "PerfLens"),
+            service_version=resource_info.get("service_version", "1.0.0"),
+            exporter=exporter_type,
+            **otlp_kwargs,
+        )
 
         instrument_registry = InstrumentRegistry(
             telemetry_provider.meter,

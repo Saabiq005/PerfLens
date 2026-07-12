@@ -76,6 +76,13 @@ class ConfigurationRegistry:
                 ConfigCategory.SCENARIOS,
             )
         )
+        
+        self._registry[ConfigCategory.TELEMETRY] = (
+            self._loader.load_file(
+                ConfigCategory.TELEMETRY,
+                "exporter.yaml",
+            )
+        )
 
     def get(
         self,

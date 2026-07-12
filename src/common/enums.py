@@ -39,6 +39,7 @@ class ConfigCategory(StrEnum):
     SCENARIOS = "scenarios"
     SIMULATOR = "simulator"
     ENVIRONMENTS = "environments"
+    TELEMETRY = "telemetry"
 
 
 class Environment(StrEnum):

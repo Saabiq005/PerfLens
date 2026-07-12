@@ -1,0 +1,8 @@
+telemetry:
+  exporter: "otlp"
+  otlp:
+    endpoint: "http://localhost:4318/v1/metrics"
+    export_interval_millis: 5000
+  resource:
+    service_name: "PerfLens"
+    service_version: "1.0.0"
