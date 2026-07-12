@@ -25,7 +25,7 @@ from __future__ import annotations
 
 from src.telemetry.exporters.base import BaseExporter
 from src.telemetry.exporters.console import ConsoleExporter
-
+from src.telemetry.exporters.otlp import OTLPExporter
 
 class ExporterFactory:
     """
