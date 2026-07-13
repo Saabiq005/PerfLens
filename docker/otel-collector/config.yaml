@@ -15,13 +15,21 @@ exporters:
 
   kafka:
     brokers:
-      - kafka:9094
-    protocol_version: 2.8.0
-    # Nesting the parameters inside the metrics signal block
+      - "${EVENTHUB_NAMESPACE}.servicebus.windows.net:9093"
+    # Change this from 2.8.0 to 2.0.0 to fix the request key metadata version mismatch
+    protocol_version: 2.0.0
+    client_id: perflens-collector
+    auth:
+      sasl:
+        mechanism: PLAIN
+        username: "$ConnectionString"
+        password: "${EVENTHUB_CONNECTION_STRING}"
+    tls:
+      insecure: false
     metrics:
-      topic: perflens.metrics
+      topic: "${EVENTHUB_NAME}"
       encoding: otlp_proto
-
+      
 service:
   pipelines:
     metrics:

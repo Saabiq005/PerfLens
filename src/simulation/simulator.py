@@ -14,7 +14,7 @@ This module does NOT:
     - Persist data.
     - Manage configuration loading.
 """
-
+import time
 from __future__ import annotations
 
 from collections.abc import Iterator
@@ -86,3 +86,5 @@ class Simulator:
         while True:
 
             yield self.next_event()
+
+            time.sleep(5)

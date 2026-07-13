@@ -13,73 +13,13 @@ services:
     ports:
       - "4317:4317"
       - "4318:4318"
-    depends_on:
-      - kafka
+
     restart: unless-stopped
     networks:
       - perflens
 
-  # ==========================================================================
-  # Apache Kafka (KRaft Mode)
-  # ==========================================================================
-  kafka:
-    image: apache/kafka:latest
-    container_name: perflens-kafka
-    hostname: kafka
-    ports:
-      - "9092:9092"
-    environment:
-      KAFKA_NODE_ID: 1
-      KAFKA_PROCESS_ROLES: broker,controller
-      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@kafka:9093"
-      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
-      KAFKA_LISTENERS: "PLAINTEXT://0.0.0.0:9092,INNER://0.0.0.0:9094,CONTROLLER://0.0.0.0:9093"
-      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://localhost:9092,INNER://kafka:9094"
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "PLAINTEXT:PLAINTEXT,INNER:PLAINTEXT,CONTROLLER:PLAINTEXT"
-      KAFKA_INTER_BROKER_LISTENER_NAME: INNER
-      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
-      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
-    volumes:
-      - kafka-data:/var/lib/kafka/data
-    restart: unless-stopped
-    networks:
-      - perflens
-
-  # ==========================================================================
-  # Kafka UI
-  # ==========================================================================
-  kafka-ui:
-    image: provectuslabs/kafka-ui:v0.7.2
-    container_name: perflens-kafka-ui
-    ports:
-      - "8080:8080"
-    environment:
-      KAFKA_CLUSTERS_0_NAME: PerfLens
-      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9094
-    depends_on:
-      - kafka
-    restart: unless-stopped
-    networks:
-      - perflens
-
-  # ==========================================================================
-  # Kafka Initialization Service (Moved inside services block)
-  # ==========================================================================
-  kafka-init:
-    image: apache/kafka:latest
-    container_name: perflens-kafka-init
-    depends_on:
-      - kafka
-    volumes:
-      - ./kafka/init-topics.sh:/init-topics.sh:ro
-    entrypoint:
-      - /bin/bash
-      - /init-topics.sh
-    restart: "no"
-    networks:
-      - perflens
+    env_file:
+      - ../.env
 
 # =============================================================================
 # Networks
