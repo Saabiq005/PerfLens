@@ -214,11 +214,11 @@ from google import genai
 import json
 
 # COMMAND ----------
-
+"""
 client = genai.Client(
     api_key="******"
 )
-
+"""
 # COMMAND ----------
 
 summary = [
