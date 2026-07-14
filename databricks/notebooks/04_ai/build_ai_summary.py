@@ -216,7 +216,7 @@ import json
 # COMMAND ----------
 
 client = genai.Client(
-    api_key="AQ.Ab8RN6IiWxQcejitG--SXlLMaUnsOqDSnT-myKG5_SovBaK_KA"
+    api_key="******"
 )
 
 # COMMAND ----------
