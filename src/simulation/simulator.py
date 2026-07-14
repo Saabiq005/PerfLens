@@ -14,9 +14,9 @@ This module does NOT:
     - Persist data.
     - Manage configuration loading.
 """
-import time
-from __future__ import annotations
 
+from __future__ import annotations
+import time
 from collections.abc import Iterator
 
 from src.mappers.runtime_registry import RuntimeRegistry
