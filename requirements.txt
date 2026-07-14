@@ -6,3 +6,4 @@ opentelemetry-api
 opentelemetry-proto
 protobuf
 numpy
+opentelemetry-exporter-otlp
